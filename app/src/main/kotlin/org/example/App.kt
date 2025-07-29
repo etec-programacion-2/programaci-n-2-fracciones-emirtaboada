@@ -1,4 +1,5 @@
 package org.example
+///Etapa 1: Definición de la Clase
 
 class Fraccion(n: Int, d: Int) {
 
