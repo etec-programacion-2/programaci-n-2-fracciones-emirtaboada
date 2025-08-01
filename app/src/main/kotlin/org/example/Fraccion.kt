@@ -1,16 +1,14 @@
 package org.example
 
 // Etapa 1: Definición de la Clase
-class Fraccion(n: Int, d: Int) {
+class Fraccion(n: Int, d: Int) : Comparable<Fraccion> {
 
     var numerador: Int = n
-        get() = field
         set(value) {
             field = value
         }
 
     var denominador: Int = d
-        get() = field
         set(value) {
             if (value == 0) throw IllegalArgumentException("El denominador no puede ser cero")
             field = value
@@ -58,6 +56,39 @@ class Fraccion(n: Int, d: Int) {
         return Fraccion(nuevoNumerador, nuevoDenominador)
     }
 
+// Etapa 4: Validaciones y Utilidades
+
+    override operator fun compareTo(otra: Fraccion): Int {
+        val diferencia = this.numerador * otra.denominador - otra.numerador * this.denominador
+        return diferencia.compareTo(0)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Fraccion) return false
+        return this.numerador == other.numerador && this.denominador == other.denominador
+    }
+
+    override fun hashCode(): Int {
+        return 31 * numerador + denominador
+    }
+
+    fun esMayor(otra: Fraccion): Boolean = this > otra
+
+    fun esMenor(otra: Fraccion): Boolean = this < otra
+
+    fun aDecimal(): Double = numerador.toDouble() / denominador.toDouble()
+
+
+    companion object {
+        fun desdeDecimal(decimal: Double): Fraccion {
+            val precision = 1000000
+            val numerador = (decimal * precision).toInt()
+            val denominador = precision
+            return Fraccion(numerador, denominador)
+        }
+    }
+
     private fun simplificar() {
         val mcd = mcd(Math.abs(numerador), Math.abs(denominador))
         numerador /= mcd
@@ -80,15 +111,17 @@ fun main() {
     val f1 = Fraccion(2, 5)
     val f2 = Fraccion(1, 10)
 
-    val suma = f1 + f2
-    val resta = f1 - f2
-    val multiplicacion = f1 * f2
-    val division = f1 / f2
-
     println("Fracción 1: $f1")
     println("Fracción 2: $f2")
-    println("Suma: $suma")
-    println("Resta: $resta")
-    println("Multiplicación: $multiplicacion")
-    println("División: $division")
+    println("Suma: ${f1 + f2}")
+    println("Resta: ${f1 - f2}")
+    println("Multiplicación: ${f1 * f2}")
+    println("División: ${f1 / f2}")
+    println("¿f1 > f2? ${f1.esMayor(f2)}")
+    println("¿f1 < f2? ${f1.esMenor(f2)}")
+    println("f1 en decimal: ${f1.aDecimal()}")
+
+    val decimal = 0.75
+    val fraccionDecimal = Fraccion.desdeDecimal(decimal)
+    println("Decimal $decimal convertido a fracción: $fraccionDecimal")
 }
