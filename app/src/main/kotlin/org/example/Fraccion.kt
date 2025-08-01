@@ -43,6 +43,21 @@ class Fraccion(n: Int, d: Int) {
         return Fraccion(nuevoNumerador, nuevoDenominador)
     }
 
+// Etapa 3: Multiplicación y División de Fracciones
+
+    operator fun times(otra: Fraccion): Fraccion {
+        val nuevoNumerador = this.numerador * otra.numerador
+        val nuevoDenominador = this.denominador * otra.denominador
+        return Fraccion(nuevoNumerador, nuevoDenominador)
+    }
+
+    operator fun div(otra: Fraccion): Fraccion {
+        if (otra.numerador == 0) throw IllegalArgumentException("No se puede dividir por una fracción con numerador 0")
+        val nuevoNumerador = this.numerador * otra.denominador
+        val nuevoDenominador = this.denominador * otra.numerador
+        return Fraccion(nuevoNumerador, nuevoDenominador)
+    }
+
     private fun simplificar() {
         val mcd = mcd(Math.abs(numerador), Math.abs(denominador))
         numerador /= mcd
@@ -67,9 +82,13 @@ fun main() {
 
     val suma = f1 + f2
     val resta = f1 - f2
+    val multiplicacion = f1 * f2
+    val division = f1 / f2
 
     println("Fracción 1: $f1")
     println("Fracción 2: $f2")
     println("Suma: $suma")
     println("Resta: $resta")
+    println("Multiplicación: $multiplicacion")
+    println("División: $division")
 }
